@@ -32,7 +32,9 @@ jobs:
           ${{ runner.os }}-
     - name: Install dependencies
       run: |
+        sudo apt install python3-pydot python3-pydot-ng graphviz
         pip install -r requirements.txt
     - name: Run
       run: |
         python chatbot_evaluation.py
+        python chatbot_evaluation.py --company='SpotifyCares' --model-file='SpotifyCares.pnml' --variants-filter='variants_percentage_1.0' --training-event-log='xes/SpotifyCares/2021-05-20T11:27:50.948620-SpotifyCares-None-training.xes' --training-replayed-event-log='xes/SpotifyCares/2021-05-20T12:32:02.762560-SpotifyCares-None-training-replayed.xes' --test-event-log='xes/SpotifyCares/2021-05-20T13:33:31.326891-SpotifyCares-None-test.xes' --test-replayed-event-log='xes/SpotifyCares/2021-05-20T13:09:02.994299-SpotifyCares-None-test-replayed.xes'
