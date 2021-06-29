@@ -1,0 +1,40 @@
+# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Python package
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    - name: Cache pip
+      uses: actions/cache@v2
+      with:
+        # This path is specific to Ubuntu
+        path: ~/.cache/pip
+        # Look to see if there is a cache hit for the corresponding requirements file
+        key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+          ${{ runner.os }}-
+    - name: Install dependencies
+      run: |
+        sudo apt install python3-pydot python3-pydot-ng graphviz
+        pip install -r requirements.txt
+    - name: Run
+      run: |
+        python chatbot_evaluation.py
+        python chatbot_evaluation.py --company='SpotifyCares' --model-file='SpotifyCares.pnml' --variants-filter='variants_percentage_1.0' --training-event-log='xes/SpotifyCares/2021-05-20T11:27:50.948620-SpotifyCares-None-training.xes' --training-replayed-event-log='xes/SpotifyCares/2021-05-20T12:32:02.762560-SpotifyCares-None-training-replayed.xes' --test-event-log='xes/SpotifyCares/2021-05-20T13:33:31.326891-SpotifyCares-None-test.xes' --test-replayed-event-log='xes/SpotifyCares/2021-05-20T13:09:02.994299-SpotifyCares-None-test-replayed.xes'
